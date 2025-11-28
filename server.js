@@ -239,13 +239,11 @@ app.post("/webhook", (req, res) => {
         // ----------------------------------------------------
         case "Reservation Capture User ID": {
             const userId = req.body.queryResult.parameters.user_id;
-            const book = req.body.queryResult.parameters.book_title;
         
             console.log("User ID:", userId);
-            console.log("Book name:", book);
 
             return res.json({
-                fulfillmentText: `Got it! Should I reserve "${book}" for you using library ID ${userId}?`,
+                fulfillmentText: `Got it! Should I go ahead and reserve it for you?`,
                 outputContexts: [
                     {
                         name: `${req.body.session}/contexts/reservation_confirm`,
