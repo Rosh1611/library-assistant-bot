@@ -107,7 +107,7 @@ app.post("/webhook", (req, res) => {
                             {
                                 type: "list",
                                 title: `Books by ${author}`,
-                                subtitle: authors[author].map((b, i) => `${i + 1}. ${b}`).join("\n")
+                                subtitle: authors[author].map((b, i) => `${i + 1}. ${b}`).join(", ")
                             }
                         ]
                     ]
@@ -131,9 +131,10 @@ app.post("/webhook", (req, res) => {
         // ----------------------------------------------------
         // 2. User chooses a book — webhook checks availability
         // ----------------------------------------------------
-        case "ReservationCheckAvailabilityIntent": {
+        case "Search Book For Reservation": {
             const book = req.body.queryResult.parameters.book_name;
 
+            // Check availability in the mock database
             if (!bookAvailability[book]) {
                 return res.json({
                     fulfillmentText: `I couldn't find availability info for "${book}".`
@@ -142,17 +143,27 @@ app.post("/webhook", (req, res) => {
 
             const available = bookAvailability[book];
 
-            return res.json({
-                fulfillmentText: available
-                  ? `"${book}" is available! Would you like to reserve it?`
-                  : `"${book}" is currently unavailable. Would you like to be notified when it's back?`,
-                outputContexts: [
-                  {
-                    name: `${req.body.session}/contexts/awaiting_reservation_confirmation`,
-                    lifespanCount: 5
-                  }
-                ]
-            });
+            if (available) {
+                return res.json({
+                    fulfillmentText: `Good news! "${book}" is available. Please provide your Library Card Number to continue with the reservation.`,
+                    outputContexts: [
+                        {
+                            name: `${req.body.session}/contexts/reservation_need_user_id`,
+                            lifespanCount: 5
+                        }
+                    ]
+                });
+            } else {
+                return res.json({
+                    fulfillmentText: `Unfortunately, "${book}" is currently checked out. Would you like to be added to the waitlist?`,
+                    outputContexts: [
+                        {
+                            name: `${req.body.session}/contexts/reservation_offer_waitlist`,
+                            lifespanCount: 5
+                        }
+                    ]
+                });
+            }
         }
 
         // ----------------------------------------------------
