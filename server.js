@@ -233,6 +233,43 @@ app.post("/webhook", (req, res) => {
                 });
             }
         }
+        
+        //---
+        //3
+        //---
+        case "Search Book By Title - yes": {
+            const book = req.body.queryResult.parameters.book_title;
+
+            if (!(book in bookAvailability)) {
+                return res.json({
+                    fulfillmentText: `I couldn't find availability info for "${book}".`
+                });
+            }
+
+            const available = bookAvailability[book];
+
+            if (available) {
+                return res.json({
+                    fulfillmentText: `Good news! "${book}" is available. Please provide your Library Card Number to continue with the reservation.`,
+                    outputContexts: [
+                        {
+                            name: `${req.body.session}/contexts/reservation_need_user_id`,
+                            lifespanCount: 5
+                        }
+                    ]
+                });
+            } else {
+                return res.json({
+                    fulfillmentText: `Unfortunately, "${book}" is currently checked out.`,
+                    outputContexts: [
+                        {
+                            name: `${req.body.session}/contexts/reservation_offer_waitlist`,
+                            lifespanCount: 5
+                        }
+                    ]
+                });
+            }
+        }
 
         default:
             return res.json({
