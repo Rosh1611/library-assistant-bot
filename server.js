@@ -37,14 +37,8 @@ const authors = {
   "George Orwell": [
     "1984"
   ],
-  "F. Scott Fitzgerald": [
-    "The Great Gatsby"
-  ],
   "Herman Melville": [
     "Moby-Dick"
-  ],
-  "J.D. Salinger": [
-    "The Catcher in the Rye"
   ],
   "Paulo Coelho": [
     "The Alchemist"
@@ -63,9 +57,6 @@ const authors = {
   "James Clear": [
     "Atomic Habits"
   ],
-  "Héctor García and Francesc Miralles": [
-    "Ikigai"
-  ],
   "Robert Kiyosaki": [
     "Rich Dad Poor Dad"
   ],
@@ -75,6 +66,12 @@ const authors = {
   "Mark Manson": [
     "The Subtle Art of Not Giving a F*ck"
   ]
+  "Agatha Christie": [
+    "The Mysterious Affair at Styles",
+    "The Secret Adversary",
+    "Murder on the Orient Express",
+    "Nemesis",
+    "Sleeping Murder"
 };
 
 // Webhook endpoint
@@ -94,11 +91,11 @@ app.post("/webhook", (req, res) => {
                 });
             }
 
-            const list = authors[author].map((b, i) => `${i + 1}. ${b}`).join("\n\n");
+            const list = authors[author].map((b, i) => `${i + 1}. ${b}`).join("\n");
 
             return res.json({
                 fulfillmentText:
-                    `Here are the books by ${author}:\n\n${list}\n\nWould you like to reserve one of these?`,
+                    `Here are the books by ${author}:\n\n${list}\n\n. Would you like to reserve one of these?`,
                 outputContexts: [
                     {
                         name: `${req.body.session}/contexts/awaiting_reservation_confirmation`,
