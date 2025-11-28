@@ -36,7 +36,7 @@ app.post("/webhook", (req, res) => {
         // ----------------------------------------------------
         // 1. User searches for books by author
         // ----------------------------------------------------
-        case "FindBookByAuthorIntent": {
+        case "Search Book By Author": {
             const author = req.body.queryResult.parameters.author_name;
 
             if (!authors[author]) {
