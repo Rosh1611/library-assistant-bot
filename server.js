@@ -234,25 +234,6 @@ app.post("/webhook", (req, res) => {
             }
         }
 
-        // ----------------------------------------------------
-        // 3. User provides their ID — process reservation
-        // ----------------------------------------------------
-        case "Reservation Capture User ID": {
-            const userId = req.body.queryResult.parameters.user_id;
-        
-            console.log("User ID:", userId);
-
-            return res.json({
-                fulfillmentText: `Got it! Should I go ahead and reserve it for you?`,
-                outputContexts: [
-                    {
-                        name: `${req.body.session}/contexts/reservation_confirm`,
-                        lifespanCount: 5
-                    }
-                ]
-            });
-        }
-
         default:
             return res.json({
                 fulfillmentText: "I'm not sure how to help with that."
