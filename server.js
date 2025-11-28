@@ -71,6 +71,7 @@ const authors = {
     "Murder on the Orient Express",
     "Nemesis",
     "Sleeping Murder"
+  ]
 };
 
 // Webhook endpoint
