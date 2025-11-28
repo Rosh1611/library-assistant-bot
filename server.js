@@ -74,15 +74,85 @@ const authors = {
   ]
 };
 
+const bookAvailability = {
+  // J.K. Rowling Books
+  "Harry Potter and the Sorcerer’s Stone": true,
+  "Harry Potter and the Chamber of Secrets": false,
+  "Harry Potter and the Prisoner of Azkaban": true,
+  "Harry Potter and the Goblet of Fire": true,
+  "Harry Potter and the Order of the Phoenix": true,
+  "Harry Potter and the Half-Blood Prince": false,
+  "Harry Potter and the Deathly Hallows": true,
+
+  // Yann Martel Books
+  "Life of Pi": true,
+
+  // Markus Zusak Books
+  "The Book Thief": true,
+
+  // J.R.R. Tolkien Books
+  "The Hobbit": true,
+  "The Lord of the Rings": false,
+  "The Fellowship of the Ring": true,
+  "The Two Towers": true,
+  "The Return of the King": true,
+
+  // Harper Lee Books
+  "To Kill a Mockingbird": true,
+
+  // Jane Austen Books
+  "Pride and Prejudice": true,
+
+  // George Orwell Books
+  "1984": true,
+
+  // Herman Melville Books
+  "Moby-Dick": false,
+
+  // Paulo Coelho Books
+  "The Alchemist": true,
+
+  // Suzanne Collins Books
+  "The Hunger Games": true,
+  "Catching Fire": true,
+  "Mockingjay": true,
+
+  // John Green Books
+  "The Fault in Our Stars": true,
+
+  // Dan Brown Books
+  "The Da Vinci Code": false,
+
+  // James Clear Books
+  "Atomic Habits": true,
+
+  // Robert Kiyosaki Books
+  "Rich Dad Poor Dad": true,
+
+  // Stephen Covey Books
+  "The 7 Habits of Highly Effective People": true,
+
+  // Mark Manson Books
+  "The Subtle Art of Not Giving a F*ck": true,
+
+  // Agatha Christie Books
+  "The Mysterious Affair at Styles": true,
+  "The Secret Adversary": true,
+  "Murder on the Orient Express": true,
+  "Nemesis": false,
+  "Sleeping Murder": true
+};
+
+
 // Webhook endpoint
 app.post("/webhook", (req, res) => {
     const intent = req.body.queryResult.intent.displayName;
 
     switch (intent) {
-        // ----------------------------------------------------
-        // 1. User searches for books by author
-        // ----------------------------------------------------
-        case "Search Book By Author": {
+    // ----------------------------------------------------
+    // 1. User searches for books by author
+    // ----------------------------------------------------
+    case "Search Book By Author": {
     const author = req.body.queryResult.parameters.author_name;
 
     if (!authors[author]) {
