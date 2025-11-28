@@ -64,7 +64,7 @@ const authors = {
   ],
   "Mark Manson": [
     "The Subtle Art of Not Giving a F*ck"
-  ]
+  ],
   "Agatha Christie": [
     "The Mysterious Affair at Styles",
     "The Secret Adversary",
