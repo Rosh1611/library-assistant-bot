@@ -238,38 +238,55 @@ app.post("/webhook", (req, res) => {
         //3
         //---
         case "Search Book By Title - yes": {
-            const book = req.body.queryResult.parameters.book_title;
+        const contexts = req.body.queryResult.outputContexts;
+        let bookTitle = null;
 
-            if (!(book in bookAvailability)) {
-                return res.json({
-                    fulfillmentText: `I couldn't find availability info for "${book}".`
-                });
-            }
-
-            const available = bookAvailability[book];
-
-            if (available) {
-                return res.json({
-                    fulfillmentText: `Good news! "${book}" is available. Please provide your Library Card Number to continue with the reservation.`,
-                    outputContexts: [
-                        {
-                            name: `${req.body.session}/contexts/reservation_need_user_id`,
-                            lifespanCount: 5
-                        }
-                    ]
-                });
-            } else {
-                return res.json({
-                    fulfillmentText: `Unfortunately, "${book}" is currently checked out.`,
-                    outputContexts: [
-                        {
-                            name: `${req.body.session}/contexts/reservation_offer_waitlist`,
-                            lifespanCount: 5
-                        }
-                    ]
-                });
+        for (const context of contexts) {
+            if (context.name.includes('contexts/reservation_need_user_id')) {
+                const parameters = context.parameters;
+                if (parameters && parameters.book_title) {
+                    bookTitle = parameters.book_title;
+                    break;
+                }
             }
         }
+
+        if (!bookTitle) {
+            return res.json({
+                fulfillmentText: "I didn't catch the book title. Could you please provide it again?"
+            });
+        }
+
+        if (!(bookTitle in bookAvailability)) {
+            return res.json({
+                fulfillmentText: `I couldn't find availability info for "${bookTitle}".`
+            });
+        }
+    
+        const available = bookAvailability[bookTitle];
+    
+        if (available) {
+            return res.json({
+                fulfillmentText: `Good news! "${bookTitle}" is available. Please provide your Library Card Number to continue with the reservation.`,
+                outputContexts: [
+                    {
+                        name: `${req.body.session}/contexts/reservation_need_user_id`,
+                        lifespanCount: 5
+                    }
+                ]
+            });
+        } else {
+            return res.json({
+                fulfillmentText: `Unfortunately, "${bookTitle}" is currently checked out.`,
+                outputContexts: [
+                    {
+                        name: `${req.body.session}/contexts/reservation_offer_waitlist`,
+                        lifespanCount: 5
+                    }
+                ]
+            });
+        }
+    }
 
         default:
             return res.json({
