@@ -223,7 +223,7 @@ app.post("/webhook", (req, res) => {
                 });
             } else {
                 return res.json({
-                    fulfillmentText: `Unfortunately, "${book}" is currently checked out. Would you like to be added to the waitlist?`,
+                    fulfillmentText: `Unfortunately, "${book}" is currently checked out.`,
                     outputContexts: [
                         {
                             name: `${req.body.session}/contexts/reservation_offer_waitlist`,
