@@ -95,7 +95,7 @@ app.post("/webhook", (req, res) => {
 
             return res.json({
                 fulfillmentText:
-                    `Here are the books by ${author}:\n\n${list}\n\n. Would you like to reserve one of these?`,
+                    `Here are the books by ${author}:<br><br>${list}<br><br>. Which one would you like to reserve?`,
                 outputContexts: [
                     {
                         name: `${req.body.session}/contexts/awaiting_reservation_confirmation`,
