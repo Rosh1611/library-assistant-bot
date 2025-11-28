@@ -144,7 +144,6 @@ const bookAvailability = {
 };
 
 
-// Webhook endpoint
 app.post("/webhook", (req, res) => {
     const intent = req.body.queryResult.intent.displayName;
 
@@ -236,20 +235,23 @@ app.post("/webhook", (req, res) => {
         }
 
         // ----------------------------------------------------
-        // 3. User says YES — confirm reservation
+        // 3. User provides their ID — process reservation
         // ----------------------------------------------------
-        case "ReservationConfirmIntent": {
-            return res.json({
-                fulfillmentText: `Great! Your reservation is confirmed. 🎉`
-            });
-        }
+        case "Reservation Capture User ID": {
+            const userId = req.body.queryResult.parameters.user_id;
+            const book = req.body.queryResult.parameters.book_title;
+        
+            console.log("User ID:", userId);
+            console.log("Book name:", book);
 
-        // ----------------------------------------------------
-        // 4. User says NO — stop flow
-        // ----------------------------------------------------
-        case "ReservationDeclineIntent": {
             return res.json({
-                fulfillmentText: `No problem! Let me know if you want to search for another book.`
+                fulfillmentText: `Got it! Should I reserve "${book}" for you using library ID ${userId}?`,
+                outputContexts: [
+                    {
+                        name: `${req.body.session}/contexts/reservation_confirm`,
+                        lifespanCount: 5
+                    }
+                ]
             });
         }
 
@@ -260,5 +262,4 @@ app.post("/webhook", (req, res) => {
     }
 });
 
-// Start server
 app.listen(3000, () => console.log("Webhook is running on port 3000"));
