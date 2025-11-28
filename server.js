@@ -202,7 +202,7 @@ app.post("/webhook", (req, res) => {
         // 2. User chooses a book — webhook checks availability
         // ----------------------------------------------------
         case "Search Book For Reservation": {
-            const book = req.body.queryResult.parameters.book_name;
+            const book = req.body.queryResult.parameters.book_title;
 
             // Check availability in the mock database
             if (!bookAvailability[book]) {
