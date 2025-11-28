@@ -4,7 +4,6 @@ const bodyParser = require("body-parser");
 const app = express();
 app.use(bodyParser.json());
 
-// Mock database with authors and their books (titles only)
 const authors = {
   "J.K. Rowling": [
     "Harry Potter and the Sorcerer’s Stone",
