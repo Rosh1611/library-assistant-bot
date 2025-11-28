@@ -83,27 +83,50 @@ app.post("/webhook", (req, res) => {
         // 1. User searches for books by author
         // ----------------------------------------------------
         case "Search Book By Author": {
-            const author = req.body.queryResult.parameters.author_name;
+    const author = req.body.queryResult.parameters.author_name;
 
-            if (!authors[author]) {
-                return res.json({
-                    fulfillmentText: `Sorry, I don’t have books listed for ${author}.`
-                });
+    if (!authors[author]) {
+        return res.json({
+            fulfillmentText: `Sorry, I don't have books listed for ${author}.`
+        });
+    }
+
+    const list = authors[author].map((b, i) => `${i + 1}. ${b}`).join("\n");
+
+    return res.json({
+        fulfillmentMessages: [
+            {
+                text: {
+                    text: [`Here are the books by ${author}:`]
+                }
+            },
+            {
+                payload: {
+                    richContent: [
+                        [
+                            {
+                                type: "list",
+                                title: `Books by ${author}`,
+                                subtitle: authors[author].map((b, i) => `${i + 1}. ${b}`).join("\n")
+                            }
+                        ]
+                    ]
+                }
+            },
+            {
+                text: {
+                    text: ["Which one would you like to reserve?"]
+                }
             }
-
-            const list = authors[author].map((b, i) => `${i + 1}. ${b}`).join("\n");
-
-            return res.json({
-                fulfillmentText:
-                    `Here are the books by ${author}:<br><br>${list}<br><br>. Which one would you like to reserve?`,
-                outputContexts: [
-                    {
-                        name: `${req.body.session}/contexts/awaiting_reservation_confirmation`,
-                        lifespanCount: 5
-                    }
-                ]
-            });
-        }
+        ],
+        outputContexts: [
+            {
+                name: `${req.body.session}/contexts/awaiting_reservation_confirmation`,
+                lifespanCount: 5
+            }
+        ]
+    });
+}
 
         // ----------------------------------------------------
         // 2. User chooses a book — webhook checks availability
