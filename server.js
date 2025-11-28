@@ -94,7 +94,7 @@ app.post("/webhook", (req, res) => {
                 });
             }
 
-            const list = authors[author].map((b, i) => `${i + 1}. ${b}`).join("\n");
+            const list = authors[author].map((b, i) => `${i + 1}. ${b}`).join("\n\n");
 
             return res.json({
                 fulfillmentText:
